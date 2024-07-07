@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class Categories {
     Long id;
-    String name;
+    String title;
 }

@@ -4,5 +4,7 @@ import com.example.ecommerce.Models.Product;
 
 public interface ProductService {
     public Product getProduct(Long id);
-
+    public Product updateProduct(Long id);
+    public void deleteProduct(Long id);
+    public Product createProduct(Product product);
 }
