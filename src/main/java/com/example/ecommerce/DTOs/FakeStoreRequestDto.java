@@ -3,11 +3,10 @@ package com.example.ecommerce.DTOs;
 import lombok.Data;
 
 @Data
-public class FakeStoreResponseDto {
-    private long id;
-    private String title;
+public class FakeStoreRequestDto {
+   private String title;
     private String description;
+    private Double price;
     private String image;
-    private double price;
     private String category;
 }

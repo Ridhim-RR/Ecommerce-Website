@@ -6,6 +6,8 @@ import com.example.ecommerce.Models.Product;
 import com.example.ecommerce.Services.ProductService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/products")
 
@@ -19,16 +21,21 @@ public ProductController(ProductService productService) {
     public Product getProduct(@PathVariable long id) {
     return this.productService.getProduct(id);
     }
-    @PostMapping("/")
+    @GetMapping("/all")
+    public List<Product> getAllProducts() {
+    return List.of(this.productService.getAllProducts());
+    }
+    @PostMapping("/create")
     public Product createProduct(@RequestBody Product product) {
-        return new Product();
+        return this.productService.createProduct(product);
     }
-    @PutMapping("/update")
-    public Product updateProduct(@RequestBody Product product) {
-    return new Product();
+    @PutMapping("/update/{id}")
+    public Product updateProduct(@PathVariable long id, @RequestBody Product product) {
+    return this.productService.updateProduct(id,product);
     }
-    @DeleteMapping("/delete")
-    public void deleteProduct(@RequestBody Product product) {
+    @DeleteMapping("/delete/{id}")
+    public void deleteProduct(@PathVariable long id) {
+    this.productService.deleteProduct(id);
         System.out.println("Product deleted");
     }
 

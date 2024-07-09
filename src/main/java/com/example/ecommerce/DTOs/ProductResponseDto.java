@@ -1,6 +1,6 @@
 package com.example.ecommerce.DTOs;
 
-import com.example.ecommerce.Models.Categories;
+import com.example.ecommerce.Models.Category;
 
 public class ProductResponseDto {
     private int product_id;
@@ -8,5 +8,5 @@ public class ProductResponseDto {
     private String description;
     private String image;
     private double price;
-    private Categories categories;
+    private Category categories;
 }

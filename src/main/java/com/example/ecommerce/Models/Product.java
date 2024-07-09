@@ -9,5 +9,5 @@ public class Product {
     Double price;
     String description;
     String image;
-    Categories categories;
+    Category category;
 }
