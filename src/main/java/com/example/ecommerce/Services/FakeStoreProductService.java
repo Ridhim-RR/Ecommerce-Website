@@ -2,6 +2,7 @@ package com.example.ecommerce.Services;
 
 import com.example.ecommerce.DTOs.FakeStoreRequestDto;
 import com.example.ecommerce.DTOs.FakeStoreResponseDto;
+import com.example.ecommerce.Exceptions.ProductNotFound;
 import com.example.ecommerce.Models.Category;
 import com.example.ecommerce.Models.Product;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,10 @@ public class FakeStoreProductService implements ProductService {
         this.restTemplate = restTemplate;
     }
     @Override
-    public Product getProduct(Long id) {
+    public Product getProduct(Long id) throws ProductNotFound {
         FakeStoreResponseDto fDto = restTemplate.getForObject("https://fakestoreapi.com/products/"+id, FakeStoreResponseDto.class);
          if(fDto == null){
-         return null;
+         throw new ProductNotFound();
          }
         return convertFakeStoreResponseDtoToProduct(fDto);
     }

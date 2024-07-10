@@ -2,6 +2,7 @@ package com.example.ecommerce.Controllers;
 
 import com.example.ecommerce.DTOs.ProductRequestDto;
 import com.example.ecommerce.DTOs.ProductResponseDto;
+import com.example.ecommerce.Exceptions.ProductNotFound;
 import com.example.ecommerce.Models.Product;
 import com.example.ecommerce.Services.ProductService;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public ProductController(ProductService productService) {
     this.productService = productService;
 }
  @GetMapping("/{id}")
-    public Product getProduct(@PathVariable long id) {
+    public Product getProduct(@PathVariable long id) throws ProductNotFound {
     return this.productService.getProduct(id);
     }
     @GetMapping("/all")
