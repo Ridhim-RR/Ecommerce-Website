@@ -19,7 +19,7 @@ public class FakeStoreProductService implements ProductService {
     public Product getProduct(Long id) throws ProductNotFound {
         FakeStoreResponseDto fDto = restTemplate.getForObject("https://fakestoreapi.com/products/"+id, FakeStoreResponseDto.class);
          if(fDto == null){
-         throw new ProductNotFound();
+         throw new ProductNotFound("No product found with id "+id);
          }
         return convertFakeStoreResponseDtoToProduct(fDto);
     }
@@ -49,7 +49,7 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Product updateProduct(Long id,Product product) {
+    public Product updateProduct(Long id,Product product) throws ProductNotFound {
         FakeStoreRequestDto requestDto = convertProductToFakeStoreRequestDto(product);
         restTemplate.put("https://fakestoreapi.com/products/"+id,requestDto);
 
@@ -57,9 +57,10 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public void deleteProduct(Long id) {
+    public Product deleteProduct(Long id) {
         restTemplate.delete("https://fakestoreapi.com/products/"+id);
 
+        return null;
     }
 
     public Product convertFakeStoreResponseDtoToProduct(FakeStoreResponseDto fDto){
