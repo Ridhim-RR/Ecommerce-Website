@@ -1,11 +1,16 @@
 package com.example.ecommerce.Controllers;
 
+import com.example.ecommerce.Common.AuthCommon;
 import com.example.ecommerce.DTOs.ProductRequestDto;
 import com.example.ecommerce.DTOs.ProductResponseDto;
+import com.example.ecommerce.DTOs.UserDto;
 import com.example.ecommerce.Exceptions.ProductNotFound;
 import com.example.ecommerce.Models.Product;
 import com.example.ecommerce.Services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,18 +19,30 @@ import java.util.List;
 @RequestMapping("/products")
 
 public class ProductController {
-ProductService productService;
+    private  AuthCommon authCommon;
+   private ProductService productService;
 
-public ProductController(@Qualifier("SelfProductService") ProductService productService) {
+public ProductController(@Qualifier("SelfProductService") ProductService productService, AuthCommon authCommon) {
     this.productService = productService;
+    this.authCommon = authCommon;
 }
  @GetMapping("/{id}")
-    public Product getProduct(@PathVariable long id) throws ProductNotFound {
-    return this.productService.getProduct(id);
+    public ResponseEntity<Product> getProduct(@PathVariable("id") long id) throws ProductNotFound {
+//   @RequestHeader("Auth") String auth
+
+//     UserDto user = authCommon.validate(auth);
+//     if(user != null){
+//         Product p = productService.getProduct(id);
+//         return new ResponseEntity<>(p, HttpStatus.OK);
+//     }
+//    return null;
+     Product p = productService.getProduct(id);
+         return new ResponseEntity<>(p, HttpStatus.OK);
     }
     @GetMapping("/all")
-    public List<Product> getAllProducts() throws ProductNotFound {
-    return List.of(this.productService.getAllProducts());
+    public Page<Product> getAllProducts(@RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize) throws ProductNotFound {
+//    return List.of(this.productService.getAllProducts(pageNumber, pageSize));
+        return  productService.getAllProducts(pageNumber,pageSize);
     }
     @PostMapping("/create")
     public Product createProduct(@RequestBody Product product) {

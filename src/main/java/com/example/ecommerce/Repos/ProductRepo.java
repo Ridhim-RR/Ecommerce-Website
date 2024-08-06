@@ -1,6 +1,8 @@
 package com.example.ecommerce.Repos;
 
 import com.example.ecommerce.Models.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +21,10 @@ public interface ProductRepo extends JpaRepository<Product,Long> {
 Optional<Product> findByTitleAndDescription(String title, String description);
 
 Product save(Product product);
+
 void deleteProductById(Long id);
+
 List<Product> findAll();
+
+Page<Product> findAll(Pageable pageable);
 }

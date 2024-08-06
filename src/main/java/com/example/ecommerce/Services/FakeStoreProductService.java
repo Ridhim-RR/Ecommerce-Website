@@ -5,6 +5,7 @@ import com.example.ecommerce.DTOs.FakeStoreResponseDto;
 import com.example.ecommerce.Exceptions.ProductNotFound;
 import com.example.ecommerce.Models.Category;
 import com.example.ecommerce.Models.Product;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,7 +26,7 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Product[] getAllProducts() {
+    public Page getAllProducts(int PageNumber, int PageSize) {
         FakeStoreResponseDto[] fDto = restTemplate.getForObject("https://fakestoreapi.com/products", FakeStoreResponseDto[].class);
         if(fDto == null){
             return null;
@@ -34,7 +35,8 @@ public class FakeStoreProductService implements ProductService {
         for(int i=0; i<fDto.length; i++){
           products[i] = convertFakeStoreResponseDtoToProduct(fDto[i]);
         }
-        return products;
+//        return products;
+        return null;
     }
 
     @Override
