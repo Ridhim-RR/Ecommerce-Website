@@ -96,7 +96,9 @@ public class SelfProductService implements ProductService {
 //     products.toArray(productArray);
 //        return productArray;
 //    }
-        Page page = productRepo.findAll(PageRequest.of(PageNumber, PageSize, Sort.by("price").descending()));
+//        Page page = productRepo.findAll(PageRequest.of(PageNumber, PageSize, Sort.by("id").ascending()));
+        Page page = productRepo.findAll(PageRequest.of(PageNumber, PageSize, Sort.by(Sort.Order.asc("id"),Sort.Order.asc("price"))));
+            System.out.println(page);
         System.out.println(page+"PAGE");
         return page;
     }

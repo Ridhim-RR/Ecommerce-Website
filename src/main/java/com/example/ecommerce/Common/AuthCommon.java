@@ -13,8 +13,9 @@ public class AuthCommon {
     }
 
     public UserDto validate(String tokenValue){
-        ResponseEntity<UserDto> response = restTemplate.getForEntity("http://localhost:8084/users/validate/" + tokenValue, UserDto.class);
-//        This will talk to the user service to verify that the user token is valid or not.
+        //        This will talk to the user service to verify that the user token is valid or not.
+        System.out.println(tokenValue + " VALUE");
+        ResponseEntity<UserDto> response = restTemplate.getForEntity("http://localhost:4145/users/validate/" + tokenValue, UserDto.class);
         System.out.println(response.getBody());
         if(!response.hasBody()){
        return null;

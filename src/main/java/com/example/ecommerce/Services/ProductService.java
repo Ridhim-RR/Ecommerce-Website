@@ -9,5 +9,5 @@ public interface ProductService {
     public Product updateProduct(Long id, Product product) throws ProductNotFound;
     public Product deleteProduct(Long id) throws ProductNotFound;
     public Product createProduct(Product product);
-    public Page getAllProducts(int PageNumber, int PageSize) throws ProductNotFound;
+    public Page<Product> getAllProducts(int PageNumber, int PageSize) throws ProductNotFound;
 }

@@ -6,37 +6,63 @@ import com.example.ecommerce.Exceptions.ProductNotFound;
 import com.example.ecommerce.Models.Category;
 import com.example.ecommerce.Models.Product;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Service
+import java.util.Arrays;
+
+@Service("FakeStore")
 public class FakeStoreProductService implements ProductService {
     private RestTemplate restTemplate;
+    private RedisTemplate redisTemplate;
 
-    FakeStoreProductService(RestTemplate restTemplate){
+    FakeStoreProductService(RestTemplate restTemplate, RedisTemplate redisTemplate){
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
     @Override
     public Product getProduct(Long id) throws ProductNotFound {
+           Product p = (Product) redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_"+ id);
+       if(p != null){
+//           Cache hit:
+           return p;
+       }
+
         FakeStoreResponseDto fDto = restTemplate.getForObject("https://fakestoreapi.com/products/"+id, FakeStoreResponseDto.class);
          if(fDto == null){
          throw new ProductNotFound("No product found with id "+id);
          }
-        return convertFakeStoreResponseDtoToProduct(fDto);
+//         Cache Miss:
+//        Put in the Cache:
+        p =  convertFakeStoreResponseDtoToProduct(fDto);
+        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_" + id,p);
+      return p;
     }
 
     @Override
-    public Page getAllProducts(int PageNumber, int PageSize) {
+    public Page<Product> getAllProducts(int pageNumber, int pageSize) {
         FakeStoreResponseDto[] fDto = restTemplate.getForObject("https://fakestoreapi.com/products", FakeStoreResponseDto[].class);
         if(fDto == null){
-            return null;
+            return  Page.empty();
         }
         Product[] products = new Product[fDto.length];
         for(int i=0; i<fDto.length; i++){
           products[i] = convertFakeStoreResponseDtoToProduct(fDto[i]);
         }
-//        return products;
-        return null;
+        int start = pageNumber * pageSize;
+        int end = Math.min(start + pageSize, products.length);
+
+        // Create a subarray for the requested page
+        Product[] paginatedProducts = new Product[end - start];
+        if (start < products.length) {
+            System.arraycopy(products, start, paginatedProducts, 0, end - start);
+        }
+
+        // Create and return a Page object
+        return new PageImpl<>(Arrays.asList(paginatedProducts), PageRequest.of(pageNumber, pageSize), products.length);
     }
 
     @Override
