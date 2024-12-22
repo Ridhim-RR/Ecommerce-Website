@@ -1,5 +1,6 @@
 package com.example.ecommerce.Services;
 
+import com.example.ecommerce.Common.AuthCommon;
 import com.example.ecommerce.DTOs.FakeStoreRequestDto;
 import com.example.ecommerce.DTOs.FakeStoreResponseDto;
 import com.example.ecommerce.Exceptions.ProductNotFound;
@@ -18,28 +19,37 @@ import java.util.Arrays;
 public class FakeStoreProductService implements ProductService {
     private RestTemplate restTemplate;
     private RedisTemplate redisTemplate;
+    private AuthCommon authCommon;
 
-    FakeStoreProductService(RestTemplate restTemplate, RedisTemplate redisTemplate){
+    FakeStoreProductService(RestTemplate restTemplate, RedisTemplate redisTemplate, AuthCommon authCommon){
         this.restTemplate = restTemplate;
         this.redisTemplate = redisTemplate;
+        this.authCommon = authCommon;
     }
     @Override
     public Product getProduct(Long id) throws ProductNotFound {
-           Product p = (Product) redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_"+ id);
-       if(p != null){
-//           Cache hit:
-           return p;
-       }
+//           Product p = (Product) redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_"+ id);
+           try {
+               authCommon.validate("27C4EF5529899439ACCF735713F27F8B");
 
-        FakeStoreResponseDto fDto = restTemplate.getForObject("https://fakestoreapi.com/products/"+id, FakeStoreResponseDto.class);
-         if(fDto == null){
-         throw new ProductNotFound("No product found with id "+id);
-         }
-//         Cache Miss:
-//        Put in the Cache:
-        p =  convertFakeStoreResponseDtoToProduct(fDto);
-        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_" + id,p);
-      return p;
+           }catch (Exception e){
+               System.out.println("CALL USER SERVICE");
+           }
+//       if(p != null){
+////           Cache hit:
+//           return p;
+//       }
+//
+//        FakeStoreResponseDto fDto = restTemplate.getForObject("https://fakestoreapi.com/products/"+id, FakeStoreResponseDto.class);
+//         if(fDto == null){
+//         throw new ProductNotFound("No product found with id "+id);
+//         }
+////         Cache Miss:
+////        Put in the Cache:
+//        p =  convertFakeStoreResponseDtoToProduct(fDto);
+//        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_" + id,p);
+//      return p;
+        return null;
     }
 
     @Override
