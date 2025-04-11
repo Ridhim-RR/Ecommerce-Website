@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -87,7 +88,7 @@ public class SelfProductService implements ProductService {
         return productRepo.save(product);
     }
 
-    public Page getAllProducts(int PageNumber, int PageSize) throws ProductNotFound {
+    public Page getAllProducts(int PageNumber, int PageSize, String searchQuery) throws ProductNotFound {
 //     List<Product> products = productRepo.findAll();
 //     if (products.isEmpty()) {
 //         throw new ProductNotFound("No products are available");
@@ -97,8 +98,13 @@ public class SelfProductService implements ProductService {
 //        return productArray;
 //    }
 //        Page page = productRepo.findAll(PageRequest.of(PageNumber, PageSize, Sort.by("id").ascending()));
-        Page page = productRepo.findAll(PageRequest.of(PageNumber, PageSize, Sort.by(Sort.Order.asc("id"),Sort.Order.asc("price"))));
-            System.out.println(page);
+//        Page page = productRepo.findAll(PageRequest.of(PageNumber, PageSize, Sort.by(Sort.Order.asc("id"),Sort.Order.asc("price"))));
+        Pageable pageable = PageRequest.of(PageNumber,PageSize,Sort.by(Sort.Order.asc("id"),Sort.Order.asc("price")));
+        if (searchQuery == null || searchQuery.trim().isEmpty()) {
+            return productRepo.findAll(pageable);
+        }
+        Page page = productRepo.findByTitleContainingIgnoreCase(searchQuery,pageable);
+        System.out.println(page);
         System.out.println(page+"PAGE");
         return page;
     }

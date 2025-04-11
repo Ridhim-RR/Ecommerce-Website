@@ -53,7 +53,7 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Page<Product> getAllProducts(int pageNumber, int pageSize) {
+    public Page<Product> getAllProducts(int pageNumber, int pageSize, String search) {
         FakeStoreResponseDto[] fDto = restTemplate.getForObject("https://fakestoreapi.com/products", FakeStoreResponseDto[].class);
         if(fDto == null){
             return  Page.empty();
