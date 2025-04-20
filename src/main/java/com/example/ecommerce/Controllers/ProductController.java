@@ -20,12 +20,15 @@ public class ProductController {
     private  AuthCommon authCommon;
    private ProductService productService;
 
-public ProductController(@Qualifier("FakeStore") ProductService productService, AuthCommon authCommon) {
+public ProductController(@Qualifier("SelfProductService") ProductService productService, AuthCommon authCommon) {
     this.productService = productService;
     this.authCommon = authCommon;
 }
  @GetMapping("/{id}")
- public ResponseEntity<Product> getProduct(@PathVariable("id") long id , @RequestHeader("Auth") String auth) throws ProductNotFound, UserNotAuthenticated {
+ public ResponseEntity<Product> getProduct(@PathVariable("id") long id , @RequestHeader("Authorization") String auth) throws ProductNotFound, UserNotAuthenticated {
+//     public ResponseEntity<Product> getProduct(@PathVariable("id") long id ) throws ProductNotFound, UserNotAuthenticated {
+
+         System.out.println(id);
     UserDto user = authCommon.validate(auth);
    if(user == null) {
        throw new UserNotAuthenticated("Token is not valid");
@@ -40,7 +43,7 @@ public ProductController(@Qualifier("FakeStore") ProductService productService, 
     }
 
     @PostMapping("/create")
-    public Product createProduct(@RequestBody Product product, @RequestHeader("Auth") String auth) throws  UserNotAuthenticated, UserNotAuthorised {
+    public Product createProduct(@RequestBody Product product, @RequestHeader("Authorization") String auth) throws  UserNotAuthenticated, UserNotAuthorised {
         UserDto user = authCommon.validate(auth);
         if(user == null) {
             throw new UserNotAuthenticated("Token is not valid");
@@ -52,7 +55,7 @@ public ProductController(@Qualifier("FakeStore") ProductService productService, 
     }
 
     @PutMapping("/update/{id}")
-    public Product updateProduct(@PathVariable long id, @RequestBody Product product, @RequestHeader("Auth") String auth) throws UserNotAuthenticated, UserNotAuthorised, ProductNotFound {
+    public Product updateProduct(@PathVariable long id, @RequestBody Product product, @RequestHeader("Authorization") String auth) throws UserNotAuthenticated, UserNotAuthorised, ProductNotFound {
         UserDto user = authCommon.validate(auth);
         if(user == null) {
             throw new UserNotAuthenticated("Token is not valid");
@@ -64,7 +67,7 @@ public ProductController(@Qualifier("FakeStore") ProductService productService, 
     }
 
     @DeleteMapping("/delete/{id}" )
-    public void deleteProduct(@PathVariable long id, @RequestHeader("Auth") String auth) throws  UserNotAuthenticated, UserNotAuthorised, ProductNotFound {
+    public void deleteProduct(@PathVariable long id, @RequestHeader("Authorization") String auth) throws  UserNotAuthenticated, UserNotAuthorised, ProductNotFound {
         UserDto user = authCommon.validate(auth);
         if(user == null) {
             throw new UserNotAuthenticated("Token is not valid");

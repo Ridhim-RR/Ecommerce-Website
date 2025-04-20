@@ -9,6 +9,6 @@ public class UserDto {
     private String name;
     private String email;
     private Boolean isVerified;
-    private List<Roles> role;
+    private List<Roles> roles;
 
 }

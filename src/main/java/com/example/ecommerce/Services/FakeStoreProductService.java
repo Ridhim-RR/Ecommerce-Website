@@ -30,8 +30,9 @@ public class FakeStoreProductService implements ProductService {
     public Product getProduct(Long id) throws ProductNotFound {
 //           Product p = (Product) redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_"+ id);
            try {
-               authCommon.validate("27C4EF5529899439ACCF735713F27F8B");
-
+//        27C4EF5529899439ACCF735713F27F8B
+               authCommon.validate("");
+//
            }catch (Exception e){
                System.out.println("CALL USER SERVICE");
            }
@@ -44,8 +45,8 @@ public class FakeStoreProductService implements ProductService {
 //         if(fDto == null){
 //         throw new ProductNotFound("No product found with id "+id);
 //         }
-////         Cache Miss:
-////        Put in the Cache:
+//         Cache Miss:
+//        Put in the Cache:
 //        p =  convertFakeStoreResponseDtoToProduct(fDto);
 //        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_" + id,p);
 //      return p;
