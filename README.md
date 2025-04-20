@@ -48,19 +48,36 @@ The **Product Service** is a core component of the e-commerce ecosystem that pro
 
 ---
 
+## 🌐 Service Discovery & Routing
+
+### 🏠 Eureka Server
+- The **Eureka Server** is used for **service discovery** in a microservices architecture.
+- It acts as a registry where all microservices can register and discover each other.
+- This ensures dynamic registration and lookup, helping services find the right endpoints for inter-service communication.
+
+### 🔀 API Gateway
+- The **API Gateway** is responsible for routing requests from clients to the appropriate backend services (Product Service, Order Service, etc.).
+- It acts as a **single entry point** for all external API calls, simplifying client-side interactions with the entire microservices ecosystem.
+- The API Gateway handles:
+    - Routing requests to the correct service
+    - Load balancing across service instances
+    - Security and authentication (via User Service)
+    - Centralized logging and monitoring
+
+---
+
 ## 📌 Technologies Used
-- Java / Spring Boot
-MySQL
-- Redis (for caching)
-- RESTful APIs
+- **Java / Spring Boot**
+- **MySQL** (for product data storage)
+- **Redis** (for caching)
+- **RESTful APIs** (for service communication)
+- **Spring Cloud Eureka** (for service discovery)
+- **Spring Cloud Gateway** (for API Gateway)
 
-
-
+---
 
 ## 🧩 Contributors
 - [Ridhim Singh Raizada]
 
 ---
-
-
 
